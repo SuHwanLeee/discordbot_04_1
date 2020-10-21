@@ -557,7 +557,7 @@ async def task():
 								)
 					else :
 						embed = discord.Embed(
-								description= "```" + bossData[i][0] + ' 리젠 ' + bossData[i][4] + "```" ,
+								description= "```" + bossData[i][0] + ' 리젠 ' +  bossData[i][4] + "```" ,
 								color=0x00ff00
 								)
 					await client.get_channel(channel).send(embed=embed, tts=False)
@@ -607,7 +607,7 @@ async def task():
 									tmp_bossTime[i] = bossTime[i] = nextTime = tmp_bossTime[i]+datetime.timedelta(hours=int(bossData[i][1]), minutes=int(bossData[i][5]))
 									tmp_bossTimeString[i] = bossTimeString[i] = nextTime.strftime('%H:%M:%S')
 									tmp_bossDateString[i] = bossDateString[i] = nextTime.strftime('%Y-%m-%d')
-									await client.get_channel(channel).send("```" + bossData[i][0] + ' 멍 인가봐요..```')
+									await client.get_channel(channel).send("```" + bossData[i][0] + ' 멍 입니다.```')
 									embed = discord.Embed(
 										description= '```다음 ' + bossData[i][0] + ' ' + bossTimeString[i] + '입니다.```',
 										color=0xff0000
@@ -619,9 +619,10 @@ async def task():
 
 #mp3 파일 생성함수(gTTS 이용, 남성목소리)
 async def MakeSound(saveSTR, filename):
-	'''
+	
 	tts = gTTS(saveSTR, lang = 'ko')
-	tts.save('./' + filename + '.mp3')
+	tts.save('./' + filename + '.wav')
+	
 	'''
 	try:
 		encText = urllib.parse.quote(saveSTR)
@@ -631,7 +632,7 @@ async def MakeSound(saveSTR, filename):
 		tts = gTTS(saveSTR, lang = 'ko')
 		tts.save('./' + filename + '.wav')
 		pass
-
+	'''
 #mp3 파일 재생함수	
 async def PlaySound(voiceclient, filename):
 	source = discord.FFmpegPCMAudio(filename)
@@ -797,31 +798,18 @@ async def JointheVC(VCchannel, TXchannel):
 #사다리함수		
 async def LadderFunc(number, ladderlist, channelVal):
 	if number < len(ladderlist):
-		if "이선생" in ladderlist :
-			print(ladderlist)
-			ladderlist.remove("이선생")
-			print(ladderlist)
-			result_ladder = random.sample(ladderlist, number-1)
-			result_ladder.append("이선생")
-			result_ladderSTR = ','.join(map(str, result_ladder))
-			embed = discord.Embed(
-				title = "----- 당첨! -----",
-				description= '```' + result_ladderSTR + '```',
-				color=0xff00ff
-				)
-			await channelVal.send(embed=embed, tts=False)
-		else:
-			result_ladder = random.sample(ladderlist, number)
-			result_ladderSTR = ','.join(map(str, result_ladder))
-			embed = discord.Embed(
+		result_ladder = random.sample(ladderlist, number)
+		result_ladderSTR = ','.join(map(str, result_ladder))
+		embed = discord.Embed(
 			title = "----- 당첨! -----",
 			description= '```' + result_ladderSTR + '```',
 			color=0xff00ff
 			)
-			await channelVal.send(embed=embed, tts=False)
+		await channelVal.send(embed=embed, tts=False)
 	else:
 		await channelVal.send('```추첨인원이 총 인원과 같거나 많습니다. 재입력 해주세요```', tts=False)
 
+		
 
 #킬초기화
 async def initkill_list():
@@ -1228,7 +1216,7 @@ while True:
 							)
 				else :
 					embed = discord.Embed(
-							description= '등록된 공지가 없습니다.',
+							description= '```등록된 공지가 없습니다.```',
 							color=0xff00ff
 							)
 				await ctx.send(embed=embed, tts=False)
@@ -1312,7 +1300,7 @@ while True:
 							)
 				else :
 					embed = discord.Embed(
-							description= '등록된 킬 목록이 없습니다. 분발하세요!',
+							description= '```등록된 킬 목록이 없습니다. 분발하세요!```',
 							color=0xff00ff
 							)
 				await ctx.send(embed=embed, tts=False)
@@ -1362,10 +1350,10 @@ while True:
 			racing_member = msg.split(" ")
 
 			if len(racing_member) == 1:
-				await ctx.send('레이스 인원이 1명 입니다.')
+				await ctx.send('```레이스 인원이 1명 입니다.```')
 				return
 			elif len(racing_member) >= 13:
-				await ctx.send('레이스 인원이 12명 초과입니다.')
+				await ctx.send('```레이스 인원이 12명 초과입니다.```')
 				return
 			else :
 				race_val = random.sample(range(14, 14+len(racing_member)), len(racing_member))
@@ -1783,7 +1771,7 @@ while True:
 						bossData[i][6] = hello[len(tmp_msg):]
 						await client.get_channel(channel).send('< ' + bossData[i][0] + ' [ ' + bossData[i][6] + ' ] 메모등록 완료>', tts=False)
 						
-					if message.content.startswith(bossData[i][0] +'메모삭제'):
+					if message.content.startswith(bossData[i][0] +' 메모삭제'):
 						
 						bossData[i][6] = ''
 						await client.get_channel(channel).send('< ' + bossData[i][0] + ' 메모삭제 완료>', tts=False)
@@ -2201,7 +2189,7 @@ while True:
 									if (datetime.datetime.now() + datetime.timedelta(hours=int(basicSetting[0]))).strftime('%Y-%m-%d') == fixed_bossTime[i].strftime('%Y-%m-%d'):
 										tmp_timeSTR = fixed_bossTime[i].strftime('%H:%M') #초빼기 : tmp_timeSTR = fixed_bossTime[i].strftime('%H:%M')
 									else:
-										tmp_timeSTR = '[' + fixed_bossTime[i].strftime('%Y-%m-%d') + '] ' + fixed_bossTime[i].strftime('%H:%M') #초빼기 : tmp_timeSTR = '[' + fixed_bossTime[i].strftime('%Y-%m-%d') + '] ' + fixed_bossTime[i].strftime('%H:%M')
+										tmp_timeSTR = '[' + fixed_bossTime[i].strftime('%Y-%m-%d') + '] ' + fixed_bossTime[i].strftime('%H:%M:%S') #초빼기 : tmp_timeSTR = '[' + fixed_bossTime[i].strftime('%Y-%m-%d') + '] ' + fixed_bossTime[i].strftime('%H:%M')
 									fixedboss_information[cntF] = fixedboss_information[cntF] + tmp_timeSTR + ' : ' + fixed_bossData[i][0] + '\n'
 
 						boss_information = []
@@ -2336,7 +2324,7 @@ while True:
 					if message.content.startswith(command15.strip() + ' '):
 						tmp_sayMessage = message.content
 						sayMessage = tmp_sayMessage[len(command15.strip())+1:]
-						await MakeSound(message.author.display_name +'님이.' + sayMessage, './sound/say')
+						await MakeSound(message.author.display_name +'님이, ' + sayMessage, './sound/say')
 						await client.get_channel(channel).send("```< " + msg.author.display_name + " >님이 \"" + sayMessage + "\"```", tts=False)
 						await PlaySound(voice_client1, './sound/say.wav')
 
@@ -2476,3 +2464,4 @@ while True:
 
 	print("Bot restarting")
 	client = discord.Client(loop=client.loop)
+	client = commands.Bot(command_prefix=commands.when_mentioned_or(""), description='일상디코봇')
